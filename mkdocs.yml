@@ -1,0 +1,51 @@
+site_name: Intune & Windows Autopilot Lab
+site_description: Hands-on Microsoft Intune lab on Hyper-V – Autopilot, security policies, Win32 apps, PSADT and Windows Update
+site_author: Samir Mohamed
+repo_url: https://github.com/SamirMohamed24/intune-endpoint-management-lab
+repo_name: SamirMohamed24/intune-endpoint-management-lab
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.top
+    - content.code.copy
+    - search.highlight
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle: { icon: material/brightness-7, name: Dark mode }
+    - scheme: slate
+      primary: indigo
+      toggle: { icon: material/brightness-4, name: Light mode }
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc: { permalink: true }
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+exclude_docs: |
+  images/README.md
+
+validation:
+  links:
+    not_found: warn
+
+nav:
+  - Home: index.md
+  - 01 Tenant setup: 01-tenant-setup.md
+  - 02 Windows Autopilot: 02-autopilot.md
+  - 03 Device configuration: 03-device-configuration.md
+  - 04 Windows LAPS: 04-laps.md
+  - 05 BitLocker: 05-bitlocker.md
+  - 06 Win32 app – 7-Zip: 06-win32-app-7zip.md
+  - 07 Supersedence: 07-supersedence.md
+  - 08 PSADT – Notepad++: 08-psadt-notepadpp.md
+  - 09 Dependencies: 09-dependencies.md
+  - 10 Windows Update: 10-windows-update.md
+  - 11 Defender for Endpoint: 11-defender.md
+  - 12 Android work profile: 12-android.md
+  - 13 Endpoint Privilege Management: 13-epm.md

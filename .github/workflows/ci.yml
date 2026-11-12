@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  powershell-lint:
+    name: Lint PowerShell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+          $results = Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Severity Error, Warning
+          $root = (Get-Location).Path + '/'
+          foreach ($r in $results) {
+            $level = if ($r.Severity -eq 'Error') { 'error' } else { 'warning' }
+            $file  = $r.ScriptPath.Replace($root, '')
+            Write-Output "::$level file=$file,line=$($r.Line)::$($r.RuleName): $($r.Message)"
+          }
+          $results | Format-Table Severity, RuleName, ScriptName, Line -AutoSize
+          if ($results | Where-Object Severity -eq 'Error') {
+            Write-Error "PSScriptAnalyzer found errors"
+            exit 1
+          }
+
+  docs-check:
+    name: Check documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install MkDocs
+        run: pip install -r requirements-docs.txt
+
+      - name: Generate start page from README
+        run: ./tools/prepare-site.sh
+
+      - name: Report missing screenshots
+        run: ./tools/check-images.sh
+
+      - name: Build site
+        run: mkdocs build

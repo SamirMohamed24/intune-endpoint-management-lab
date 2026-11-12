@@ -1,0 +1,8 @@
+*.intunewin
+*.msi
+*.exe
+*.iso
+*.vhdx
+*.csv
+site/
+docs/index.md
